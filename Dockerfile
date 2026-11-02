@@ -1,18 +1,14 @@
-# Use a lightweight Node.js base image
-FROM node:18-alpine
+FROM node:20-alpine
 
-# Set working directory
 WORKDIR /app
 
-# Install app dependencies
 COPY package.json ./
-RUN npm ci --only=production
 
-# Copy application source
-COPY server.js ./
+# No package-lock.json present, install production dependencies only
+RUN npm install --omit=dev
 
-# Expose the port the app runs on
+COPY . .
+
 EXPOSE 3000
 
-# Start the application
 CMD ["npm", "start"]
